@@ -32,7 +32,7 @@ public class Shop2 implements Shop {
     }
 
 
-    public Map addProduct(Product product) {
+    public void addProduct(Product product) {
         if (mapOfProducts.containsKey(product)) {
             counter++;
         } else {
@@ -41,7 +41,7 @@ public class Shop2 implements Shop {
         mapOfProducts.put(product, counter);
 
 
-        return mapOfProducts;
+
     }
 
     public Shop1 getCheck() {

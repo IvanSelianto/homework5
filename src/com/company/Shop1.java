@@ -50,13 +50,13 @@ public class Shop1 implements Shop{
         return check+"\n"+Double.toString(doubleCounter);
     }
 
-    public List addProduct(Product product){
+    public void addProduct(Product product){
         productList.add(product);
-        return  productList;
+
     }
 
 
-    public Shop1 getCheck(){ //Можно ли так делать? Сделал для того, что обшая сумма была после чека, а не до.
+    public Shop1 getCheck(){
         for (int i = 0; i < productList.size(); i++) {
             for (int j = 0; j < productList.size(); j++) {
                 if (productList.get(i).getName().equals(productList.get(j).getName())) {
