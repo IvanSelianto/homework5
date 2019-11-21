@@ -1,8 +1,10 @@
 package com.company;
 
 import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class Shop2 implements Shop {
     private Map<Product, Integer> mapOfProducts = new HashMap();
@@ -13,11 +15,6 @@ public class Shop2 implements Shop {
 
     }
 
-    public Shop2(Map mapOfProducts, double doubleCounter) {
-        this.mapOfProducts = mapOfProducts;
-        this.doubleCounter = doubleCounter;
-    }
-
     public Map<Product, Integer> getMapOfProducts() {
         return mapOfProducts;
     }
@@ -26,9 +23,22 @@ public class Shop2 implements Shop {
         this.mapOfProducts = mapOfProducts;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Shop2 shop2 = (Shop2) o;
+        return mapOfProducts.equals(shop2.mapOfProducts);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(mapOfProducts);
+    }
+
     public String toString() {
 
-        return mapOfProducts + "\n" + Double.toString(doubleCounter);
+        return mapOfProducts + "\n" + doubleCounter;
     }
 
 
@@ -41,19 +51,15 @@ public class Shop2 implements Shop {
         mapOfProducts.put(product, counter);
 
 
-
     }
 
-    public Shop1 getCheck() {
-        mapOfProducts.keySet();
-        for (Map.Entry<Product, Integer> entry :
-                mapOfProducts.entrySet()) {
-            doubleCounter += entry.getKey().getCost() * entry.getValue();
 
-        }
+    public Paycheck getCheck(List<Long> id) {
+        Paycheck paycheck = new Paycheck();
+        paycheck.put(mapOfProducts);
+        mapOfProducts.clear();
 
-        Shop1 shop2 = new Shop1(mapOfProducts, doubleCounter);
 
-return shop2;
+        return paycheck;
     }
 }
