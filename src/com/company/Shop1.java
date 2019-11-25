@@ -1,88 +1,94 @@
 package com.company;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class Shop1 implements Shop{
+public class Shop1 implements Shop {
     private List<Product> productList = new ArrayList<>();
-    private Map<String, Integer> check = new HashMap();
+    private Map<Product, Integer> storageMap = new HashMap();
+    private Map<Long, Product> mapOfId = new HashMap<>();
+    private Map<Product, Integer> mapOfShoppingCart = new HashMap<>();
     private int intCounter;
-    private double doubleCounter;
-    public Shop1(Map check, double doubleCounter){
-        this.check = check;
-        this.doubleCounter =doubleCounter;
-    }
-    public Shop1(){
+
+
+    public Shop1() {
     }
 
-    public List<Product> getProductList() {
-        return productList;
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Shop1 shop1 = (Shop1) o;
+        return Objects.equals(storageMap, shop1.storageMap);
     }
 
-    public void setProductList(List<Product> productList) {
-        this.productList = productList;
+    @Override
+    public int hashCode() {
+        return Objects.hash(storageMap);
     }
 
-    public void setCheck(Map<String, Integer> check) {
-        this.check = check;
-    }
 
-    public int getIntCounter() {
-        return intCounter;
-    }
-
-    public void setIntCounter(int intCounter) {
-        this.intCounter = intCounter;
-    }
-
-    public double getDoubleCounter() {
-        return doubleCounter;
-    }
-
-    public void setDoubleCounter(double doubleCounter) {
-        this.doubleCounter = doubleCounter;
-    }
-
-    public String toString() {
-
-        return check+"\n"+Double.toString(doubleCounter);
-    }
-
-    public List addProduct(Product product){
+    public void addProduct(Product product) {
         productList.add(product);
-        return  productList;
-    }
+        intCounter = 0;
+
+        if (mapOfId.containsKey(product)) {
+            intCounter++;
+        } else {
+            intCounter = 1;
+        }
+        mapOfId.put(product.getId(), product);
 
 
-    public Shop1 getCheck(){ //Можно ли так делать? Сделал для того, что обшая сумма была после чека, а не до.
         for (int i = 0; i < productList.size(); i++) {
             for (int j = 0; j < productList.size(); j++) {
                 if (productList.get(i).getName().equals(productList.get(j).getName())) {
                     intCounter++;
                 }
             }
-            check.put(productList.get(i).getName(), intCounter);
+            storageMap.put(productList.get(i), intCounter);
+
 
             intCounter = 0;
         }
 
-        totalAmount();
-        Shop1 shop1 = new Shop1(check, doubleCounter);
-        return shop1;
 
+    }
+
+
+    public Paycheck getCheck(Buyer buyer) {
+
+        Paycheck paycheck = new Paycheck();
+
+        paycheck.put(buyer.getMapOfShoppingCart());
+
+        return paycheck;
 
 
     }
-    private double totalAmount(){
-        for (int i = 0; i < productList.size() ; i++) {
-            doubleCounter+= productList.get(i).getCost();
 
+    public Map<Product, Integer> getStorageMap() {
+        return storageMap;
+    }
+
+    public Map<Product, Integer> giveProduct(long id) {
+
+        if (storageMap.get(mapOfId.get(id)) == 0) {
+            return mapOfShoppingCart;
         }
-        return  doubleCounter;
+
+        mapOfShoppingCart.put(mapOfId.get(id), intCounter);
+
+        if (mapOfShoppingCart.containsKey(mapOfId.get(id))) {
+            intCounter++;
+        } else {
+            intCounter = 1;
+        }
+        mapOfShoppingCart.put(mapOfId.get(id), intCounter);
+        storageMap.put(mapOfId.get(id), storageMap.get(mapOfId.get(id)) - 1);
+
+
+        return mapOfShoppingCart;
     }
-
-
-
 }

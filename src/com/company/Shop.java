@@ -1,12 +1,15 @@
 package com.company;
 
+
 import java.util.List;
+import java.util.Map;
 
 public interface Shop {
 
+    void addProduct(Product product);
 
-    public Object addProduct(Product product);
-    public Shop1 getCheck();
+    Paycheck getCheck(Buyer buyer);
+    Map<Product,Integer> giveProduct(long id);
 
 
 

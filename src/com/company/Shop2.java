@@ -1,59 +1,81 @@
 package com.company;
 
 import java.util.HashMap;
-import java.util.List;
+
 import java.util.Map;
+import java.util.Objects;
 
 public class Shop2 implements Shop {
-    private Map<Product, Integer> mapOfProducts = new HashMap();
-    private int counter;
-    private double doubleCounter;
+    private Map<Product, Integer> storageMap = new HashMap();
+    private Map<Long, Product> mapOfId = new HashMap<>();
+    private Map<Product, Integer> mapOfShoppingCart = new HashMap<>();
+    private int intCounter;
 
     public Shop2() {
 
     }
 
-    public Shop2(Map mapOfProducts, double doubleCounter) {
-        this.mapOfProducts = mapOfProducts;
-        this.doubleCounter = doubleCounter;
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Shop2 shop2 = (Shop2) o;
+        return storageMap.equals(shop2.storageMap);
     }
 
-    public Map<Product, Integer> getMapOfProducts() {
-        return mapOfProducts;
-    }
-
-    public void setMapOfProducts(Map<Product, Integer> mapOfProducts) {
-        this.mapOfProducts = mapOfProducts;
-    }
-
-    public String toString() {
-
-        return mapOfProducts + "\n" + Double.toString(doubleCounter);
+    @Override
+    public int hashCode() {
+        return Objects.hash(storageMap);
     }
 
 
-    public Map addProduct(Product product) {
-        if (mapOfProducts.containsKey(product)) {
-            counter++;
+    public void addProduct(Product product) {
+        if (storageMap.containsKey(product)) {
+            intCounter++;
         } else {
-            counter = 1;
+            intCounter = 1;
         }
-        mapOfProducts.put(product, counter);
+        storageMap.put(product, intCounter);
+
+        intCounter = 0;
+
+        if (mapOfId.containsKey(product)) {
+            intCounter++;
+        } else {
+            intCounter = 1;
+        }
+        mapOfId.put(product.getId(), product);
 
 
-        return mapOfProducts;
     }
 
-    public Shop1 getCheck() {
-        mapOfProducts.keySet();
-        for (Map.Entry<Product, Integer> entry :
-                mapOfProducts.entrySet()) {
-            doubleCounter += entry.getKey().getCost() * entry.getValue();
 
+    public Paycheck getCheck(Buyer buyer) {
+        Paycheck paycheck = new Paycheck();
+
+        paycheck.put(buyer.getMapOfShoppingCart());
+
+        return paycheck;
+    }
+
+    public Map<Product, Integer> giveProduct(long id) {
+        if (storageMap.get(mapOfId.get(id)) == 0) {
+            return mapOfShoppingCart;
         }
 
-        Shop1 shop2 = new Shop1(mapOfProducts, doubleCounter);
+        mapOfShoppingCart.put(mapOfId.get(id), intCounter);
 
-return shop2;
+        if (mapOfShoppingCart.containsKey(mapOfId.get(id))) {
+            intCounter++;
+        } else {
+            intCounter = 1;
+        }
+        mapOfShoppingCart.put(mapOfId.get(id), intCounter);
+        storageMap.put(mapOfId.get(id), storageMap.get(mapOfId.get(id)) - 1);
+
+
+        return mapOfShoppingCart;
     }
+
 }
+

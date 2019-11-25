@@ -5,6 +5,7 @@ public  abstract  class Product {
     private  long id;
     private double cost;
 
+
     public Product(String name, long id, double cost){
         this.name = name;
         this.id = id;
