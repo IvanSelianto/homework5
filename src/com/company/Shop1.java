@@ -4,26 +4,15 @@ import java.util.*;
 
 public class Shop1 implements Shop {
     private List<Product> productList = new ArrayList<>();
-    private Map<Product, Integer>  storageMap = new HashMap();
+    private Map<Product, Integer> storageMap = new HashMap();
+    private Map<Long, Product> mapOfId = new HashMap<>();
+    private Map<Product, Integer> mapOfShoppingCart = new HashMap<>();
     private int intCounter;
-
 
 
     public Shop1() {
     }
 
-    public List<Product> getProductList() {
-        return productList;
-    }
-
-    public void setProductList(List<Product> productList) {
-
-        this.productList = productList;
-    }
-
-    public void setCheck(Map<Product, Integer> check) {
-        this.storageMap = check;
-    }
 
 
     @Override
@@ -41,23 +30,15 @@ public class Shop1 implements Shop {
 
 
     public void addProduct(Product product) {
-
         productList.add(product);
+        intCounter = 0;
 
-    }
-
-
-    public Paycheck getCheck(List<Long> id) {
-        Paycheck paycheck = new Paycheck();
-
-        paycheck.put(storageMap);
-
-        return paycheck;
-
-
-    }
-
-    public Map<Product, Integer> getStorageMap() {
+        if (mapOfId.containsKey(product)) {
+            intCounter++;
+        } else {
+            intCounter = 1;
+        }
+        mapOfId.put(product.getId(), product);
 
 
         for (int i = 0; i < productList.size(); i++) {
@@ -71,9 +52,43 @@ public class Shop1 implements Shop {
 
             intCounter = 0;
         }
-        return storageMap;
+
+
     }
 
 
+    public Paycheck getCheck(Buyer buyer) {
 
+        Paycheck paycheck = new Paycheck();
+
+        paycheck.put(buyer.getMapOfShoppingCart());
+
+        return paycheck;
+
+
+    }
+
+    public Map<Product, Integer> getStorageMap() {
+        return storageMap;
+    }
+
+    public Map<Product, Integer> giveProduct(long id) {
+
+        if (storageMap.get(mapOfId.get(id)) == 0) {
+            return mapOfShoppingCart;
+        }
+
+        mapOfShoppingCart.put(mapOfId.get(id), intCounter);
+
+        if (mapOfShoppingCart.containsKey(mapOfId.get(id))) {
+            intCounter++;
+        } else {
+            intCounter = 1;
+        }
+        mapOfShoppingCart.put(mapOfId.get(id), intCounter);
+        storageMap.put(mapOfId.get(id), storageMap.get(mapOfId.get(id)) - 1);
+
+
+        return mapOfShoppingCart;
+    }
 }

@@ -26,16 +26,11 @@ public class Buyer {
         return Objects.hash(mapOfShoppingCart);
     }
 
-    public void buy(int id, Shop shop) {
-        int counter=1;
+    public void buy(long id, Shop shop) {
+       mapOfShoppingCart= shop.giveProduct(id);
+    }
 
-        Shop1 shop1 = new Shop1();
-        for (int i = 0; i <shop1.getProductList().size() ; i++) {
-            if(shop1.getProductList().get(i).getId()== id){
-                mapOfShoppingCart.put(shop1.getProductList().get(i), counter);
-                counter++;
-            }
-        }
+
 
 
 
@@ -58,4 +53,4 @@ public class Buyer {
 
 
     }
-}
+
